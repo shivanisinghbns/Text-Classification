@@ -1,0 +1,8 @@
+pandas
+numpy
+transformer
+scikit-learn
+tensorflow
+python==3.10
+flask
+torch #for pretrained model

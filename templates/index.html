@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h2>Sentiment Analysis</h2>
+                </div>
+                <div class="card-body">
+                    <form id="sentimentForm">
+                        <div class="form-group">
+                            <label for="text">Enter Text for Sentiment Analysis:</label>
+                            <textarea class="form-control" id="text" rows="5" placeholder="Type your text here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Analyze Sentiment</button>
+                    </form>
+                    <div id="prediction" class="mt-4 text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js (required for Bootstrap components) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Handle form submission
+        $('#sentimentForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent page reload
+            let text = $('#text').val(); // Get text input
+
+            // Send the text to the Flask server via AJAX
+            $.ajax({
+                url: '/predict/pretrained',
+                type: 'POST',
+                data: {text: text},
+                success: function(response) {
+                    // Display result on the page
+                    $('#prediction').text("Sentiment: " + response.sentiment).removeClass('text-danger').addClass('text-success');
+                },
+                error: function(error) {
+                    // Display error message
+                    $('#prediction').text("Error: " + error.responseJSON.error).removeClass('text-success').addClass('text-danger');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
